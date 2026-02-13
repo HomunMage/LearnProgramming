@@ -50,10 +50,11 @@
 	}
 </script>
 
-<div class="flex flex-col rounded border border-gray-700">
+<div data-testid="code-editor" class="flex flex-col rounded border border-gray-700">
 	<!-- Toolbar -->
 	<div class="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-3 py-1.5">
 		<select
+			data-testid="language-select"
 			value={language}
 			onchange={(e) => onlanguagechange((e.target as HTMLSelectElement).value as Language)}
 			class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-300"
@@ -64,6 +65,7 @@
 		</select>
 
 		<button
+			data-testid="run-btn"
 			onclick={handleRun}
 			disabled={isRunning}
 			class="flex items-center gap-1 rounded bg-green-600 px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-green-700 disabled:opacity-50"
@@ -74,6 +76,7 @@
 
 	<!-- Code input -->
 	<textarea
+		data-testid="code-input"
 		value={code}
 		oninput={(e) => oncodechange((e.target as HTMLTextAreaElement).value)}
 		onkeydown={handleKeydown}
@@ -84,13 +87,13 @@
 
 	<!-- Output -->
 	{#if output || error}
-		<div class="border-t border-gray-700 bg-gray-950 p-3">
+		<div data-testid="code-output" class="border-t border-gray-700 bg-gray-950 p-3">
 			<div class="mb-1 text-xs font-medium text-gray-500">Output:</div>
 			{#if error}
-				<pre class="text-xs text-red-400">{error}</pre>
+				<pre data-testid="code-error" class="text-xs text-red-400">{error}</pre>
 			{/if}
 			{#if output}
-				<pre class="text-xs text-gray-300">{output}</pre>
+				<pre data-testid="code-stdout" class="text-xs text-gray-300">{output}</pre>
 			{/if}
 		</div>
 	{/if}

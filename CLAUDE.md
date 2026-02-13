@@ -13,6 +13,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run all tests:** `npm test`
 - **Run tests in watch mode:** `npm run test:unit`
 - **Run a single test file:** `npx vitest run src/lib/checker/domain.test.ts`
+- **E2E tests (Docker):** `docker compose up --build --abort-on-container-exit --exit-code-from playwright`
+- **E2E tests (local):** `npx playwright test` (requires app running on port 3000)
 
 ## Architecture
 
@@ -21,7 +23,7 @@ This is a **Svelte 5 + SvelteKit** app using **pure static CSR** (no SSR). It bu
 ### Key config
 
 - **`myconfig.js`** — Central place to set `projectName` for base path. Used by both `svelte.config.js` (SvelteKit `paths.base`) and `vite.config.ts` (Vite `base`). Empty string = root deploy, non-empty = subpath deploy (e.g., GitHub Pages project site).
-- **`vite.config.ts`** — Backend URL is set per mode via `import.meta.env.VITE_BACKEND_URL` (dev: `localhost:5000`, prod: `namechecker.posetmage.com`).
+- **`vite.config.ts`** — Vitest workspaces, Tailwind + SvelteKit plugins, `preview.allowedHosts` for Docker e2e.
 
 ### Test workspaces
 
@@ -45,9 +47,24 @@ After every code modification, always run these two commands in order and fix an
 
 **Svelte components handle UI/UX only.** All business logic, data processing, and API calls must be extracted into pure TypeScript modules in `src/lib/`. Svelte files (`.svelte`) should only contain presentation, layout, user interaction, and state binding — never domain logic. This keeps logic testable without component rendering and framework-independent.
 
-Example: `src/routes/+page.svelte` imports `checkDomain` from `$lib/checker/domain.ts` — the component just calls it and renders results. The checker itself is a pure TS function with its own unit test.
+Example: `src/routes/+page.svelte` imports tutorial stores and engine modules from `$lib/` — the component just wires them together and renders results.
 
 **Style with Tailwind utility classes directly in markup.** Use Tailwind v4 classes in Svelte templates. No custom CSS files or `<style>` blocks unless absolutely necessary. Global styles live in `src/app.css` (just the Tailwind import).
+
+## E2E Testing (Playwright)
+
+E2E tests run via Docker Compose with two services: `app` (Vite preview on port 3000) and `playwright` (Firefox browser tests).
+
+- **Config:** `playwright.config.ts` — Firefox browser, 30s timeout, screenshots on, trace on retry
+- **Tests:** `e2e/app.spec.ts` — 13 tests covering all UI panels and interactions
+- **Screenshots:** Saved to `e2e/screenshots/` (8 screenshots captured during tests)
+- **Docker:** `docker-compose.yml` + `Dockerfile.playwright` (based on `mcr.microsoft.com/playwright:v1.58.2-noble`)
+
+### Test conventions
+
+- All interactive elements must have `data-testid` attributes
+- Naming: `data-testid="topic-{id}"`, `data-testid="chapter-{id}"`, `data-testid="cell-btn-{row}-{col}"`, etc.
+- Use `toHaveValue()` for `<textarea>` and `<input>`, `toContainText()` for other elements
 
 ## Code Style
 

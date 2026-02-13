@@ -107,6 +107,7 @@
 		ontopicchange={handleTopicChange}
 	/>
 	<button
+		data-testid="settings-btn"
 		onclick={() => (showSettings = true)}
 		class="mr-4 rounded p-2 text-gray-400 transition-colors hover:bg-gray-700 hover:text-white"
 		title="Settings"

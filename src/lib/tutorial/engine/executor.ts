@@ -30,7 +30,7 @@ export async function executeJS(
 			const console = { log: (...args) => __logs.push(args.map(String).join(' ')) };
 			${declarations}
 			const __result = (() => { ${code} })();
-			({ logs: __logs, result: __result });
+			return { logs: __logs, result: __result };
 		`;
 
 		const fn = new Function(`"use strict"; ${fullCode}`);

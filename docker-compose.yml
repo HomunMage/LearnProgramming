@@ -1,0 +1,30 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'node -e "fetch(\"http://localhost:3000/LearnProgramming/\").then(r=>{process.exit(r.ok?0:1)}).catch(()=>process.exit(1))"'
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - ./e2e/screenshots:/app/e2e/screenshots
+      - ./e2e/test-results:/app/e2e/test-results
+    environment:
+      - PLAYWRIGHT_BASE_URL=http://app:3000/LearnProgramming
+    command: npx playwright test --reporter=list

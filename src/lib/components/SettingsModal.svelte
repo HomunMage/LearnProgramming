@@ -39,13 +39,14 @@
 			onclick={(e) => e.stopPropagation()}
 			role="document"
 		>
-			<h2 class="mb-4 text-lg font-semibold text-white">Settings</h2>
+			<h2 data-testid="settings-title" class="mb-4 text-lg font-semibold text-white">Settings</h2>
 
 			<div class="mb-4">
 				<label for="api-key" class="mb-1 block text-sm text-gray-400">
 					Google Gemini API Key
 				</label>
 				<input
+					data-testid="api-key-input"
 					id="api-key"
 					type="password"
 					bind:value={apiKeyInput}
@@ -66,10 +67,15 @@
 			</div>
 
 			<div class="flex justify-end gap-2">
-				<button onclick={onclose} class="rounded px-4 py-2 text-sm text-gray-400 hover:text-white">
+				<button
+					data-testid="settings-cancel"
+					onclick={onclose}
+					class="rounded px-4 py-2 text-sm text-gray-400 hover:text-white"
+				>
 					Cancel
 				</button>
 				<button
+					data-testid="settings-save"
 					onclick={handleSave}
 					class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
 				>

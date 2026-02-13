@@ -88,16 +88,20 @@
 	}
 </script>
 
-<div class="flex h-full flex-col rounded border border-gray-700">
+<div data-testid="chat-panel" class="flex h-full flex-col rounded border border-gray-700">
 	<!-- Header -->
 	<div class="border-b border-gray-700 bg-gray-800 px-3 py-2">
 		<span class="text-sm font-medium text-gray-300">AI Tutor</span>
 	</div>
 
 	<!-- Messages -->
-	<div bind:this={chatContainer} class="flex-1 space-y-3 overflow-y-auto p-3">
+	<div
+		data-testid="chat-messages"
+		bind:this={chatContainer}
+		class="flex-1 space-y-3 overflow-y-auto p-3"
+	>
 		<!-- Lesson instruction as first message -->
-		<div class="rounded-lg bg-blue-900/20 p-3">
+		<div data-testid="lesson-instruction" class="rounded-lg bg-blue-900/20 p-3">
 			<div class="mb-1 text-xs font-medium text-blue-400">Lesson</div>
 			<div class="prose-sm text-sm text-gray-300">
 				<!-- eslint-disable-next-line svelte/no-at-html-tags -->
@@ -137,6 +141,7 @@
 	<div class="border-t border-gray-700 p-2">
 		<div class="flex gap-2">
 			<textarea
+				data-testid="chat-input"
 				bind:value={input}
 				onkeydown={handleKeydown}
 				placeholder={provider ? 'Ask anything...' : 'Set API key in Settings to chat'}
@@ -145,6 +150,7 @@
 				class="flex-1 resize-none rounded bg-gray-800 px-3 py-2 text-sm text-white outline-none placeholder:text-gray-600 disabled:opacity-50"
 			></textarea>
 			<button
+				data-testid="chat-send"
 				onclick={sendMessage}
 				disabled={!input.trim() || isLoading}
 				class="self-end rounded bg-blue-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:opacity-50"

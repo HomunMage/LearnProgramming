@@ -40,7 +40,7 @@
 	}
 </script>
 
-<div class="overflow-auto rounded border border-gray-700">
+<div data-testid="spreadsheet" class="overflow-auto rounded border border-gray-700">
 	<table class="w-full border-collapse text-sm">
 		<thead>
 			<tr>
@@ -64,10 +64,15 @@
 						{r + 1}
 					</td>
 					{#each row as cell, c (c)}
-						<td class="border border-gray-700 px-0 py-0" ondblclick={() => startEdit(r, c)}>
+						<td
+							data-testid="cell-{r}-{c}"
+							class="border border-gray-700 px-0 py-0"
+							ondblclick={() => startEdit(r, c)}
+						>
 							{#if editingCell?.row === r && editingCell?.col === c}
 								<input
 									type="text"
+									data-testid="cell-input-{r}-{c}"
 									bind:value={editValue}
 									onblur={commitEdit}
 									onkeydown={handleKeydown}
@@ -76,6 +81,7 @@
 							{:else}
 								<button
 									type="button"
+									data-testid="cell-btn-{r}-{c}"
 									class="w-full cursor-cell px-2 py-1 text-left text-gray-200"
 									onclick={() => startEdit(r, c)}
 								>

@@ -13,11 +13,14 @@
 		"format": "prettier --write .",
 		"lint": "npm run format && prettier --check . && npx eslint . --ext .svelte,.svelte.ts,.svelte.js --fix",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run"
+		"test": "npm run test:unit -- --run",
+		"test:e2e": "npx playwright test",
+		"test:e2e:docker": "docker compose up --build --abort-on-container-exit --exit-code-from playwright"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.36.0",
+		"@playwright/test": "^1.58.2",
 		"@sveltejs/adapter-static": "^3.0.10",
 		"@sveltejs/kit": "^2.43.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.0",
