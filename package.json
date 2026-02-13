@@ -13,8 +13,7 @@
 		"format": "prettier --write .",
 		"lint": "npm run format && prettier --check . && npx eslint . --ext .svelte,.svelte.ts,.svelte.js --fix",
 		"test:unit": "vitest",
-		"test": "npm run test:unit -- --run",
-		"cap": "npm run build && npx cap sync"
+		"test": "npm run test:unit -- --run"
 	},
 	"devDependencies": {
 		"@eslint/compat": "^1.4.0",
@@ -44,11 +43,6 @@
 	},
 	"dependencies": {
 		"luxon": "^3.7.2",
-		"@capacitor/android": "^7.4.3",
-		"@capacitor/camera": "^7.0.2",
-		"@capacitor/cli": "^7.4.3",
-		"@capacitor/core": "^7.4.3",
-		"@capacitor/local-notifications": "^7.0.3",
 		"uuid": "^13.0.0"
 	}
 }

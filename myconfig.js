@@ -1,5 +1,5 @@
 // myconfig.js
-export const projectName = ``;
+export const projectName = `LearnProgramming`;
 
 export const projectBase = projectName ? `/${projectName}` : '';
 export const projectBaseWithSlash = projectBase ? `${projectBase}/` : '/';
