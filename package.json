@@ -1,5 +1,5 @@
 {
-	"name": "name-checker",
+	"name": "learn-programming",
 	"private": true,
 	"version": "0.1.0",
 	"type": "module",
@@ -40,9 +40,5 @@
 		"vite": "^7.1.7",
 		"vitest": "^3.2.4",
 		"vitest-browser-svelte": "^1.1.0"
-	},
-	"dependencies": {
-		"luxon": "^3.7.2",
-		"uuid": "^13.0.0"
 	}
 }
