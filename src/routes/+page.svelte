@@ -9,94 +9,21 @@
 	import { settings } from '$lib/stores/settings.svelte';
 	import { createProvider } from '$lib/backend/llm';
 	import type { LLMProvider, LessonContext } from '$lib/backend/llm';
-	import type { Language } from '$lib/tutorial/engine/executor';
-	import { loadData, setCellRaw, toArray } from '$lib/tutorial/engine/spreadsheet';
-	import type { SpreadsheetState } from '$lib/tutorial/engine/spreadsheet';
-	import { autoBindings, buildInputs } from '$lib/tutorial/engine/bridge';
-	import { execute } from '$lib/tutorial/engine/executor';
+	import { toArray } from '$lib/tutorial/engine/spreadsheet';
 
-	// Settings modal
 	let showSettings = $state(false);
 
-	// Spreadsheet state
-	let spreadsheet = $state<SpreadsheetState>(loadData(tutorial.currentChapter.initialTable));
-
-	// Code editor state
-	let code = $state(tutorial.currentChapter.initialCode);
-	let language = $state<Language>(tutorial.currentChapter.language);
-	let output = $state('');
-	let error = $state<string | null>(null);
-
-	// Reload when chapter changes
-	$effect(() => {
-		const chapter = tutorial.currentChapter;
-		spreadsheet = loadData(chapter.initialTable);
-		code = chapter.initialCode;
-		language = chapter.language;
-		output = '';
-		error = null;
-	});
-
-	// LLM provider (reactive to settings changes)
 	let provider = $derived<LLMProvider | null>(
 		settings.hasApiKey ? createProvider(settings.providerType, settings.apiKey) : null
 	);
 
-	// Lesson context for AI chat
 	let lessonContext = $derived<LessonContext>({
 		topic: tutorial.currentTopic.title,
 		chapter: tutorial.currentChapter.title,
-		tableData: toArray(spreadsheet),
-		currentCode: code,
-		language
+		tableData: toArray(tutorial.spreadsheet),
+		currentCode: tutorial.code,
+		language: tutorial.language
 	});
-
-	function handleCellChange(row: number, col: number, value: string) {
-		spreadsheet = setCellRaw(spreadsheet, row, col, value);
-	}
-
-	async function handleRun() {
-		const bindings = autoBindings(spreadsheet.cols);
-		const inputs = buildInputs(spreadsheet, bindings);
-		const result = await execute(language, code, inputs, toArray(spreadsheet));
-		output = result.output;
-		error = result.error;
-
-		// If code returned column data, update spreadsheet
-		if (result.returnValue != null) {
-			const ret = result.returnValue;
-			if (Array.isArray(ret) && ret.length > 0) {
-				// If return is array of arrays (multiple columns), update B, C, etc.
-				if (Array.isArray(ret[0])) {
-					const columns = ret as (string | number | null)[][];
-					for (let ci = 0; ci < columns.length; ci++) {
-						const targetCol = ci + 1; // B=1, C=2, ...
-						for (let ri = 0; ri < columns[ci].length; ri++) {
-							if (ri < spreadsheet.rows && targetCol < spreadsheet.cols) {
-								spreadsheet = setCellRaw(spreadsheet, ri, targetCol, String(columns[ci][ri] ?? ''));
-							}
-						}
-					}
-				} else {
-					// Single array → update column B
-					const values = ret as (string | number | null)[];
-					for (let ri = 0; ri < values.length; ri++) {
-						if (ri < spreadsheet.rows && 1 < spreadsheet.cols) {
-							spreadsheet = setCellRaw(spreadsheet, ri, 1, String(values[ri] ?? ''));
-						}
-					}
-				}
-			}
-		}
-	}
-
-	function handleTopicChange(index: number) {
-		tutorial.topicIndex = index;
-	}
-
-	function handleChapterChange(index: number) {
-		tutorial.chapterIndex = index;
-	}
 </script>
 
 <!-- Top navigation -->
@@ -104,7 +31,7 @@
 	<TopicBar
 		topics={tutorial.topics}
 		activeIndex={tutorial.topicIndex}
-		ontopicchange={handleTopicChange}
+		ontopicchange={(i) => tutorial.selectTopic(i)}
 	/>
 	<button
 		data-testid="settings-btn"
@@ -132,29 +59,34 @@
 <ChapterTabs
 	chapters={tutorial.currentTopic.chapters}
 	activeIndex={tutorial.chapterIndex}
-	onchapterchange={handleChapterChange}
+	onchapterchange={(i) => tutorial.selectChapter(i)}
 />
 
 <!-- Main content: 3 panels -->
 <div class="grid min-h-0 flex-1 grid-cols-[1fr_380px]">
 	<!-- Left: Spreadsheet + Code -->
-	<div class="flex min-h-0 flex-col gap-2 overflow-auto border-r border-gray-700 p-3">
-		<Spreadsheet grid={spreadsheet} oncellchange={handleCellChange} />
+	<div class="flex min-h-0 flex-col gap-2 overflow-hidden border-r border-gray-700 p-3">
+		<div class="shrink-0">
+			<Spreadsheet
+				grid={tutorial.spreadsheet}
+				oncellchange={(r, c, v) => tutorial.editCell(r, c, v)}
+			/>
+		</div>
 
 		<CodeEditor
-			{code}
-			{language}
-			{output}
-			{error}
-			onrun={handleRun}
-			oncodechange={(c) => (code = c)}
-			onlanguagechange={(l) => (language = l)}
+			code={tutorial.code}
+			language={tutorial.language}
+			output={tutorial.output}
+			error={tutorial.error}
+			onrun={() => tutorial.run()}
+			oncodechange={(c) => tutorial.editCode(c)}
+			onlanguagechange={(l) => tutorial.setLanguage(l)}
 		/>
 	</div>
 
 	<!-- Right: Chat -->
 	<div class="min-h-0 p-3">
-		<ChatPanel {provider} {lessonContext} instruction={tutorial.currentChapter.instruction} />
+		<ChatPanel {provider} {lessonContext} instruction={tutorial.currentChapter.tutorial} />
 	</div>
 </div>
 

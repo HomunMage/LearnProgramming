@@ -1,4 +1,5 @@
 // Code execution engine — runs JS (browser), Python (Pyodide), SQL (sql.js)
+// Variables named B, C, D... automatically sync back to spreadsheet columns.
 
 import type { CellValue } from './spreadsheet';
 
@@ -6,57 +7,55 @@ export type Language = 'js' | 'python' | 'sql';
 
 export interface ExecutionResult {
 	output: string;
-	returnValue: unknown;
 	error: string | null;
-	tableUpdate?: CellValue[][];
+	/** Column letter → array of values to write back (e.g. { B: [1,2,3], C: [4,5,6] }) */
+	columns: Record<string, CellValue[]>;
 }
+
+const COL_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 /** Execute JavaScript code with column data injected as variables */
 export async function executeJS(
 	code: string,
 	inputs: Record<string, CellValue[]>
 ): Promise<ExecutionResult> {
-	const logs: string[] = [];
-
 	try {
-		// Build variable declarations from inputs
+		// Build variable declarations from inputs (A, B, C... that already have data)
 		const declarations = Object.entries(inputs)
-			.map(([name, values]) => `const ${name} = ${JSON.stringify(values)};`)
+			.map(([name, values]) => `let ${name} = ${JSON.stringify(values)};`)
 			.join('\n');
 
-		// Capture console.log output
+		// After user code runs, collect all column-letter variables that are arrays
+		const collectCols = COL_LETTERS.split('')
+			.map((l) => `if(typeof ${l}!=='undefined'&&Array.isArray(${l}))__cols.${l}=${l};`)
+			.join('');
+
 		const fullCode = `
 			const __logs = [];
 			const console = { log: (...args) => __logs.push(args.map(String).join(' ')) };
+			const __cols = {};
 			${declarations}
-			const __result = (() => { ${code} })();
-			return { logs: __logs, result: __result };
+			${code}
+			${collectCols}
+			return { logs: __logs, columns: __cols };
 		`;
 
-		const fn = new Function(`"use strict"; ${fullCode}`);
-		const { logs: capturedLogs, result } = fn() as {
+		const fn = new Function(fullCode);
+		const { logs, columns } = fn() as {
 			logs: string[];
-			result: unknown;
+			columns: Record<string, CellValue[]>;
 		};
-		logs.push(...capturedLogs);
-
-		// If result is an array of arrays, treat as table update
-		let tableUpdate: CellValue[][] | undefined;
-		if (Array.isArray(result) && result.length > 0 && Array.isArray(result[0])) {
-			tableUpdate = result as CellValue[][];
-		}
 
 		return {
 			output: logs.join('\n'),
-			returnValue: result,
 			error: null,
-			tableUpdate
+			columns
 		};
 	} catch (err) {
 		return {
-			output: logs.join('\n'),
-			returnValue: null,
-			error: err instanceof Error ? err.message : String(err)
+			output: '',
+			error: err instanceof Error ? err.message : String(err),
+			columns: {}
 		};
 	}
 }
@@ -66,11 +65,10 @@ export async function executePython(
 	_code: string,
 	_inputs: Record<string, CellValue[]>
 ): Promise<ExecutionResult> {
-	// Pyodide loading is deferred to future phase
 	return {
 		output: '',
-		returnValue: null,
-		error: 'Python execution is not yet available. Coming soon!'
+		error: 'Python execution is not yet available. Coming soon!',
+		columns: {}
 	};
 }
 
@@ -79,11 +77,10 @@ export async function executeSQL(
 	_code: string,
 	_tableData: CellValue[][]
 ): Promise<ExecutionResult> {
-	// sql.js loading is deferred to future phase
 	return {
 		output: '',
-		returnValue: null,
-		error: 'SQL execution is not yet available. Coming soon!'
+		error: 'SQL execution is not yet available. Coming soon!',
+		columns: {}
 	};
 }
 

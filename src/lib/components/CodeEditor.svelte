@@ -50,7 +50,7 @@
 	}
 </script>
 
-<div data-testid="code-editor" class="flex flex-col rounded border border-gray-700">
+<div data-testid="code-editor" class="flex min-h-0 flex-1 flex-col rounded border border-gray-700">
 	<!-- Toolbar -->
 	<div class="flex items-center justify-between border-b border-gray-700 bg-gray-800 px-3 py-1.5">
 		<select
@@ -81,7 +81,7 @@
 		oninput={(e) => oncodechange((e.target as HTMLTextAreaElement).value)}
 		onkeydown={handleKeydown}
 		spellcheck={false}
-		class="min-h-[120px] flex-1 resize-y bg-gray-900 p-3 font-mono text-sm text-green-300 outline-none placeholder:text-gray-600"
+		class="min-h-0 flex-1 resize-none bg-gray-900 p-3 font-mono text-sm text-green-300 outline-none placeholder:text-gray-600"
 		placeholder="Write code here..."
 	></textarea>
 
