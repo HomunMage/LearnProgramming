@@ -11,7 +11,7 @@ export interface LessonContext {
 	session: string;
 	tableData: (string | number | null)[][];
 	currentCode: string;
-	language: 'js' | 'python' | 'sql';
+	language: 'js' | 'python' | 'sql' | 'html' | 'markdown';
 }
 
 export interface LLMProvider {

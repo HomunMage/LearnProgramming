@@ -18,10 +18,6 @@
 		"test:e2e:docker": "docker compose up --build --abort-on-container-exit --exit-code-from playwright"
 	},
 	"devDependencies": {
-		"@codemirror/lang-javascript": "^6.2.4",
-		"@codemirror/lang-python": "^6.2.1",
-		"@codemirror/lang-sql": "^6.10.0",
-		"@codemirror/theme-one-dark": "^6.1.3",
 		"@eslint/compat": "^1.4.0",
 		"@eslint/js": "^9.36.0",
 		"@playwright/test": "^1.58.2",
@@ -48,5 +44,14 @@
 		"vite": "^7.1.7",
 		"vitest": "^3.2.4",
 		"vitest-browser-svelte": "^1.1.0"
+	},
+	"dependencies": {
+		"@codemirror/lang-javascript": "^6.2.4",
+		"@codemirror/lang-python": "^6.2.1",
+		"@codemirror/lang-sql": "^6.10.0",
+		"@codemirror/theme-one-dark": "^6.1.3",
+		"@codemirror/lang-html": "^6.4.11",
+		"@codemirror/lang-markdown": "^6.5.0",
+		"marked": "^17.0.2"
 	}
 }

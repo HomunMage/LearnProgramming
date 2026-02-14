@@ -12,6 +12,8 @@ export interface Session {
 	js?: string;
 	py?: string;
 	sql?: string;
+	html?: string;
+	md?: string;
 	columnBindings: Record<string, number>;
 	hints: string[];
 }

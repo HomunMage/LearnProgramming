@@ -1,8 +1,8 @@
-// src/lib/data/chapters.ts
-// All tutorial chapters and sessions — single source of truth
+// src/lib/courses/functional/chapters.ts
+// Functional programming course — chapters and sessions
 // To add content: append to the sessions array of any chapter
 
-import type { Chapter } from './types';
+import type { Chapter } from '$lib/data/types';
 
 export const chapters: Chapter[] = [
 	{

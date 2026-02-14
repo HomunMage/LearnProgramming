@@ -7,6 +7,8 @@
 	import { javascript } from '@codemirror/lang-javascript';
 	import { python } from '@codemirror/lang-python';
 	import { sql } from '@codemirror/lang-sql';
+	import { html } from '@codemirror/lang-html';
+	import { markdown } from '@codemirror/lang-markdown';
 	import { oneDark } from '@codemirror/theme-one-dark';
 	import type { Language } from '$lib/tutorial/engine/executor';
 
@@ -17,7 +19,12 @@
 		error,
 		onrun,
 		oncodechange,
-		onlanguagechange
+		onlanguagechange,
+		availableLanguages = [
+			{ value: 'js', label: 'JavaScript' },
+			{ value: 'python', label: 'Python' },
+			{ value: 'sql', label: 'SQL' }
+		]
 	}: {
 		code: string;
 		language: Language;
@@ -26,6 +33,7 @@
 		onrun: () => void | Promise<void>;
 		oncodechange: (code: string) => void;
 		onlanguagechange: (lang: Language) => void;
+		availableLanguages?: { value: string; label: string }[];
 	} = $props();
 
 	let isRunning = $state(false);
@@ -42,6 +50,10 @@
 				return python();
 			case 'sql':
 				return sql();
+			case 'html':
+				return html();
+			case 'markdown':
+				return markdown();
 		}
 	}
 
@@ -116,9 +128,9 @@
 			onchange={(e) => onlanguagechange((e.target as HTMLSelectElement).value as Language)}
 			class="rounded bg-gray-700 px-2 py-1 text-xs text-gray-300"
 		>
-			<option value="js">JavaScript</option>
-			<option value="python">Python</option>
-			<option value="sql">SQL</option>
+			{#each availableLanguages as lang (lang.value)}
+				<option value={lang.value}>{lang.label}</option>
+			{/each}
 		</select>
 
 		<button

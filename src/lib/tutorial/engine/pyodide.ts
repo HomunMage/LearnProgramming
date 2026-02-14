@@ -1,7 +1,7 @@
 // src/lib/tutorial/engine/pyodide.ts
 // Pyodide lazy loader — loads Python WASM runtime from CDN on first use
 
-const PYODIDE_VERSION = '0.29.3';
+const PYODIDE_VERSION = '0.27.7';
 const PYODIDE_CDN = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/pyodide.mjs`;
 
 let instance: any = null;
