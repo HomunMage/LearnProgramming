@@ -1,6 +1,11 @@
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
 	import '../app.css';
+	import { preloadPyodide, preloadFrameworks } from '$lib/tutorial/engine/preload';
+
+	preloadPyodide();
+	preloadFrameworks();
+
 	let { children } = $props();
 </script>
 
