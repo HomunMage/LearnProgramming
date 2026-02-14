@@ -55,7 +55,7 @@
 		</div>
 
 		<!-- Left Bottom -->
-		<div class="min-h-0 overflow-hidden border-t border-gray-700 p-3">
+		<div class="min-h-0 overflow-y-auto border-t border-gray-700 p-3">
 			{@render leftBottom()}
 		</div>
 	</div>
