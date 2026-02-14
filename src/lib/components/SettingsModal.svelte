@@ -1,3 +1,4 @@
+<!-- src/lib/components/SettingsModal.svelte -->
 <script lang="ts">
 	import { settings } from '$lib/stores/settings.svelte';
 

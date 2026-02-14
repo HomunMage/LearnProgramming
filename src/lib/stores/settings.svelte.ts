@@ -1,3 +1,4 @@
+// src/lib/stores/settings.svelte.ts
 // User settings store — localStorage-backed, Svelte 5 runes
 
 import type { ProviderType } from '$lib/backend/llm';

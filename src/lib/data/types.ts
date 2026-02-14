@@ -1,3 +1,4 @@
+// src/lib/data/types.ts
 // Data types for tutorial content
 
 import type { CellValue } from '$lib/tutorial/engine/spreadsheet';

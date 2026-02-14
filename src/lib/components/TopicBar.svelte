@@ -1,3 +1,4 @@
+<!-- src/lib/components/TopicBar.svelte -->
 <script lang="ts">
 	import type { Topic } from '$lib/tutorial/content';
 

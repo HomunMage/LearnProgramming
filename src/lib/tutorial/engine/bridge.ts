@@ -1,3 +1,4 @@
+// src/lib/tutorial/engine/bridge.ts
 // Bridge between spreadsheet data and code execution
 // Maps spreadsheet columns to named variables for code
 

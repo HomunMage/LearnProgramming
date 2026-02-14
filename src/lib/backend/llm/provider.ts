@@ -1,3 +1,4 @@
+// src/lib/backend/llm/provider.ts
 // LLM provider factory — manages the active provider
 
 import type { LLMProvider } from './types';

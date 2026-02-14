@@ -1,3 +1,4 @@
+// src/lib/backend/llm/types.ts
 // LLM provider interface — decoupled design for swapping backends
 
 export interface ChatMessage {

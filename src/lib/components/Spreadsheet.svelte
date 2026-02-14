@@ -1,3 +1,4 @@
+<!-- src/lib/components/Spreadsheet.svelte -->
 <script lang="ts">
 	import type { SpreadsheetState } from '$lib/tutorial/engine/spreadsheet';
 	import { colToLetter } from '$lib/tutorial/engine/spreadsheet';

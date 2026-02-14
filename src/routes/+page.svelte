@@ -1,3 +1,4 @@
+<!-- src/routes/+page.svelte -->
 <script lang="ts">
 	import TopicBar from '$lib/components/TopicBar.svelte';
 	import ChapterTabs from '$lib/components/ChapterTabs.svelte';

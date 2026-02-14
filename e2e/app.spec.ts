@@ -91,7 +91,7 @@ test.describe('Tutorial App', () => {
 		await expect(page.getByTestId('cell-btn-0-0')).toContainText('10');
 
 		const codeInput = page.getByTestId('code-input');
-		await expect(codeInput).toHaveValue(/add3/);
+		await expect(codeInput).toContainText('add3');
 
 		await page.screenshot({
 			path: 'e2e/screenshots/06-chapter-switched.png',

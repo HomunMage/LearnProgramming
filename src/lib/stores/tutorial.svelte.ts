@@ -1,3 +1,4 @@
+// src/lib/stores/tutorial.svelte.ts
 // Tutorial store — single source of truth for navigation + runtime state
 
 import { topics } from '$lib/data/topics';

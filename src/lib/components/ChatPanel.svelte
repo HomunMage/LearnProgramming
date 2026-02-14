@@ -1,3 +1,4 @@
+<!-- src/lib/components/ChatPanel.svelte -->
 <script lang="ts">
 	import type { ChatMessage, LLMProvider, LessonContext } from '$lib/backend/llm';
 

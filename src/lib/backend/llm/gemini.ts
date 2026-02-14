@@ -1,3 +1,4 @@
+// src/lib/backend/llm/gemini.ts
 // Google Gemini LLM provider
 
 import type { ChatMessage, LessonContext, LLMProvider } from './types';

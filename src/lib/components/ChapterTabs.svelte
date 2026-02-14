@@ -1,3 +1,4 @@
+<!-- src/lib/components/ChapterTabs.svelte -->
 <script lang="ts">
 	import type { Chapter } from '$lib/tutorial/content';
 
