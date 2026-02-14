@@ -5,7 +5,7 @@
 import type { CellValue } from './spreadsheet';
 import { getPyodide, isPyodideLoaded } from './pyodide';
 
-export type Language = 'js' | 'python' | 'sql' | 'html' | 'markdown';
+export type Language = 'js' | 'python' | 'sql' | 'html' | 'markdown' | 'jsx' | 'vue' | 'svelte';
 
 export interface ExecutionResult {
 	output: string;
@@ -145,6 +145,9 @@ export async function execute(
 			return executeSQL(code, tableData);
 		case 'html':
 		case 'markdown':
+		case 'jsx':
+		case 'vue':
+		case 'svelte':
 			return { output: code, error: null, columns: {} };
 	}
 }

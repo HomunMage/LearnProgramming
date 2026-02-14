@@ -18,7 +18,8 @@
 		instruction,
 		onchapterchange,
 		onsessionchange,
-		leftPanel
+		leftTop,
+		leftBottom
 	}: {
 		chapters: Chapter[];
 		chapterIndex: number;
@@ -29,7 +30,8 @@
 		instruction: string;
 		onchapterchange: (i: number) => void;
 		onsessionchange: (i: number) => void;
-		leftPanel: Snippet;
+		leftTop: Snippet;
+		leftBottom: Snippet;
 	} = $props();
 </script>
 
@@ -43,14 +45,22 @@
 
 <SessionTabs {sessions} activeIndex={sessionIndex} {onsessionchange} />
 
-<!-- Main content: left (course-specific) | right (chat) -->
+<!-- Main content: 3 panels, all fixed height with own scroll -->
 <div class="grid min-h-0 flex-1 grid-cols-[1fr_380px]">
-	<!-- Left: course-specific content -->
-	<div class="flex min-h-0 flex-col border-r border-gray-700">
-		{@render leftPanel()}
+	<!-- Left: two stacked panels -->
+	<div class="grid min-h-0 grid-rows-2 border-r border-gray-700">
+		<!-- Left Top -->
+		<div class="min-h-0 overflow-y-auto p-3">
+			{@render leftTop()}
+		</div>
+
+		<!-- Left Bottom -->
+		<div class="min-h-0 overflow-hidden border-t border-gray-700 p-3">
+			{@render leftBottom()}
+		</div>
 	</div>
 
-	<!-- Right: Chat (shared) -->
+	<!-- Right: Chat -->
 	<div class="min-h-0 p-3">
 		<ChatPanel {provider} {lessonContext} {instruction} />
 	</div>

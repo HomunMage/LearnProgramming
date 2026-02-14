@@ -4,6 +4,7 @@
 import type { CourseDefinition } from './types';
 import { chapters as functionalChapters } from './functional/chapters';
 import { chapters as htmlChapters } from './html/chapters';
+import { chapters as frameworksChapters } from './frameworks/chapters';
 
 export const courses: CourseDefinition[] = [
 	{
@@ -21,6 +22,14 @@ export const courses: CourseDefinition[] = [
 		icon: '</>',
 		layout: 'html-preview',
 		chapters: htmlChapters
+	},
+	{
+		id: 'frameworks',
+		title: 'Frameworks',
+		description: 'Learn React, Vue, and Svelte side by side',
+		icon: '⚛',
+		layout: 'framework-preview',
+		chapters: frameworksChapters
 	}
 ];
 

@@ -54,6 +54,12 @@
 				return html();
 			case 'markdown':
 				return markdown();
+			case 'jsx':
+				return javascript({ jsx: true });
+			case 'vue':
+				return javascript();
+			case 'svelte':
+				return html();
 		}
 	}
 
@@ -148,13 +154,18 @@
 
 	<!-- Output -->
 	{#if output || error}
-		<div data-testid="code-output" class="border-t border-gray-700 bg-gray-950 p-3">
+		<div
+			data-testid="code-output"
+			class="max-h-32 overflow-y-auto border-t border-gray-700 bg-gray-950 p-3"
+		>
 			<div class="mb-1 text-xs font-medium text-gray-500">Output:</div>
 			{#if error}
-				<pre data-testid="code-error" class="text-xs text-red-400">{error}</pre>
+				<pre data-testid="code-error" class="whitespace-pre-wrap text-xs text-red-400">{error}</pre>
 			{/if}
 			{#if output}
-				<pre data-testid="code-stdout" class="text-xs text-gray-300">{output}</pre>
+				<pre
+					data-testid="code-stdout"
+					class="whitespace-pre-wrap text-xs text-gray-300">{output}</pre>
 			{/if}
 		</div>
 	{/if}

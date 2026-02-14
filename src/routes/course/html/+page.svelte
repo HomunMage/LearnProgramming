@@ -57,24 +57,23 @@
 		renderedHtml = '';
 	}}
 >
-	{#snippet leftPanel()}
-		<div class="min-h-0 flex-1 p-3">
-			<HtmlPreview
-				html={renderedHtml}
-				title={tutorial.language === 'markdown' ? 'Markdown Preview' : 'HTML Preview'}
-			/>
-		</div>
-		<div class="min-h-0 flex-1 border-t border-gray-700 p-3">
-			<CodeEditor
-				code={tutorial.code}
-				language={tutorial.language}
-				output=""
-				error={null}
-				onrun={handleRun}
-				oncodechange={(c) => tutorial.editCode(c)}
-				onlanguagechange={(l) => tutorial.setLanguage(l)}
-				availableLanguages={htmlLanguages}
-			/>
-		</div>
+	{#snippet leftTop()}
+		<HtmlPreview
+			html={renderedHtml}
+			title={tutorial.language === 'markdown' ? 'Markdown Preview' : 'HTML Preview'}
+		/>
+	{/snippet}
+
+	{#snippet leftBottom()}
+		<CodeEditor
+			code={tutorial.code}
+			language={tutorial.language}
+			output=""
+			error={null}
+			onrun={handleRun}
+			oncodechange={(c) => tutorial.editCode(c)}
+			onlanguagechange={(l) => tutorial.setLanguage(l)}
+			availableLanguages={htmlLanguages}
+		/>
 	{/snippet}
 </CourseShell>

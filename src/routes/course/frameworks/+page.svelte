@@ -1,16 +1,33 @@
-<!-- src/routes/course/functional/+page.svelte -->
+<!-- src/routes/course/frameworks/+page.svelte -->
 <script lang="ts">
 	import CourseShell from '$lib/components/CourseShell.svelte';
-	import Spreadsheet from '$lib/components/Spreadsheet.svelte';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
+	import HtmlPreview from '$lib/components/HtmlPreview.svelte';
 	import { createTutorialStore } from '$lib/stores/tutorial.svelte';
 	import { settings } from '$lib/stores/settings.svelte';
 	import { createProvider } from '$lib/backend/llm';
 	import type { LLMProvider, LessonContext } from '$lib/backend/llm';
-	import { toArray } from '$lib/tutorial/engine/spreadsheet';
-	import { chapters } from '$lib/courses/functional/chapters';
+	import { chapters } from '$lib/courses/frameworks/chapters';
+	import { buildFrameworkHtml } from '$lib/tutorial/engine/framework';
+	import type { FrameworkType } from '$lib/tutorial/engine/framework';
 
 	const tutorial = createTutorialStore(chapters);
+
+	let renderedHtml = $state('');
+
+	const frameworkLanguages = [
+		{ value: 'html', label: 'Vanilla' },
+		{ value: 'jsx', label: 'React (JSX)' },
+		{ value: 'vue', label: 'Vue' },
+		{ value: 'svelte', label: 'Svelte' }
+	];
+
+	const previewTitles: Record<string, string> = {
+		html: 'Vanilla Preview',
+		jsx: 'React Preview',
+		vue: 'Vue Preview',
+		svelte: 'Svelte Preview'
+	};
 
 	let provider = $derived<LLMProvider | null>(
 		settings.hasApiKey ? createProvider(settings.providerType, settings.apiKey) : null
@@ -19,10 +36,14 @@
 	let lessonContext = $derived<LessonContext>({
 		chapter: tutorial.currentChapter.title,
 		session: tutorial.currentSession.title,
-		tableData: toArray(tutorial.spreadsheet),
+		tableData: [],
 		currentCode: tutorial.code,
 		language: tutorial.language
 	});
+
+	function handleRun() {
+		renderedHtml = buildFrameworkHtml(tutorial.code, tutorial.language as FrameworkType);
+	}
 </script>
 
 <CourseShell
@@ -33,25 +54,29 @@
 	{provider}
 	{lessonContext}
 	instruction={tutorial.currentSession.tutorial}
-	onchapterchange={(i) => tutorial.selectChapter(i)}
-	onsessionchange={(i) => tutorial.selectSession(i)}
+	onchapterchange={(i) => {
+		tutorial.selectChapter(i);
+		renderedHtml = '';
+	}}
+	onsessionchange={(i) => {
+		tutorial.selectSession(i);
+		renderedHtml = '';
+	}}
 >
 	{#snippet leftTop()}
-		<Spreadsheet
-			grid={tutorial.spreadsheet}
-			oncellchange={(r, c, v) => tutorial.editCell(r, c, v)}
-		/>
+		<HtmlPreview html={renderedHtml} title={previewTitles[tutorial.language] ?? 'Preview'} raw />
 	{/snippet}
 
 	{#snippet leftBottom()}
 		<CodeEditor
 			code={tutorial.code}
 			language={tutorial.language}
-			output={tutorial.output}
-			error={tutorial.error}
-			onrun={() => tutorial.run()}
+			output=""
+			error={null}
+			onrun={handleRun}
 			oncodechange={(c) => tutorial.editCode(c)}
 			onlanguagechange={(l) => tutorial.setLanguage(l)}
+			availableLanguages={frameworkLanguages}
 		/>
 	{/snippet}
 </CourseShell>

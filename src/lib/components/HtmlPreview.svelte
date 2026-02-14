@@ -2,14 +2,15 @@
 <script lang="ts">
 	let {
 		html,
-		title = 'Preview'
+		title = 'Preview',
+		raw = false
 	}: {
 		html: string;
 		title?: string;
+		raw?: boolean;
 	} = $props();
 
-	let srcdoc = $derived(
-		`<!DOCTYPE html>
+	const wrapper = `<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -28,16 +29,19 @@ img { max-width: 100%; height: auto; }
 ul, ol { padding-left: 1.5rem; }
 hr { border: none; border-top: 1px solid #4a5568; margin: 1rem 0; }
 </style>
-</head>
-<body>${html}</body>
-</html>`
-	);
+</head>`;
+
+	let srcdoc = $derived(raw ? html : `${wrapper}<body>${html}</body></html>`);
 </script>
 
 <div data-testid="html-preview" class="flex h-full flex-col rounded border border-gray-700">
 	<div class="border-b border-gray-700 bg-gray-800 px-3 py-2">
 		<span class="text-sm font-medium text-gray-300">{title}</span>
 	</div>
-	<iframe {srcdoc} sandbox="allow-scripts" class="flex-1 rounded-b bg-gray-950" title="HTML Preview"
+	<iframe
+		{srcdoc}
+		sandbox={raw ? 'allow-scripts allow-same-origin' : 'allow-scripts'}
+		class="flex-1 rounded-b bg-gray-950"
+		title="HTML Preview"
 	></iframe>
 </div>

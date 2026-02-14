@@ -25,6 +25,9 @@ export function createTutorialStore(courseChapters: Chapter[]) {
 	}
 
 	function defaultLanguage(session: Session): Language {
+		if (session.jsx) return 'jsx';
+		if (session.vue) return 'vue';
+		if (session.svelte) return 'svelte';
 		if (session.html) return 'html';
 		if (session.md) return 'markdown';
 		if (session.js) return 'js';
@@ -45,6 +48,12 @@ export function createTutorialStore(courseChapters: Chapter[]) {
 				return session.html ?? '';
 			case 'markdown':
 				return session.md ?? '';
+			case 'jsx':
+				return session.jsx ?? '';
+			case 'vue':
+				return session.vue ?? '';
+			case 'svelte':
+				return session.svelte ?? '';
 		}
 	}
 

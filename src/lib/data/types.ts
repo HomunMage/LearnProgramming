@@ -14,6 +14,9 @@ export interface Session {
 	sql?: string;
 	html?: string;
 	md?: string;
+	jsx?: string;
+	vue?: string;
+	svelte?: string;
 	columnBindings: Record<string, number>;
 	hints: string[];
 }

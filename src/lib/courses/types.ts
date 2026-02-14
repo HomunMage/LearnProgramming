@@ -3,7 +3,7 @@
 
 import type { Chapter } from '$lib/data/types';
 
-export type CourseLayout = 'spreadsheet' | 'html-preview';
+export type CourseLayout = 'spreadsheet' | 'html-preview' | 'framework-preview';
 
 export interface CourseDefinition {
 	id: string;
