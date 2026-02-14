@@ -92,7 +92,7 @@ export async function executePython(
 		// Run user code
 		await pyodide.runPythonAsync(code);
 
-		// Collect column-letter variables that are lists or numpy arrays, returned as JSON
+		// Collect column-letter variables (lists, numpy arrays, polars Series)
 		const resultJson = await pyodide.runPythonAsync(
 			`import json as _json\n` +
 				`_cols = {}\n` +
@@ -101,6 +101,7 @@ export async function executePython(
 				`        _v = eval(_l)\n` +
 				`        if isinstance(_v, list): _cols[_l] = _v\n` +
 				`        elif hasattr(_v, 'tolist'): _cols[_l] = _v.tolist()\n` +
+				`        elif hasattr(_v, 'to_list'): _cols[_l] = _v.to_list()\n` +
 				`    except: pass\n` +
 				`_json.dumps(_cols)`
 		);

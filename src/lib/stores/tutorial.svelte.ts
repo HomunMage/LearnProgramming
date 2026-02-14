@@ -1,8 +1,8 @@
 // src/lib/stores/tutorial.svelte.ts
 // Tutorial store — single source of truth for navigation + runtime state
 
-import { topics } from '$lib/data/topics';
-import type { Topic, Chapter } from '$lib/data/types';
+import { chapters } from '$lib/data/chapters';
+import type { Chapter, Session } from '$lib/data/types';
 import type { Language } from '$lib/tutorial/engine/executor';
 import type { SpreadsheetState } from '$lib/tutorial/engine/spreadsheet';
 import { loadData, setCellRaw, toArray, letterToCol } from '$lib/tutorial/engine/spreadsheet';
@@ -10,64 +10,64 @@ import { autoBindings, buildInputs } from '$lib/tutorial/engine/bridge';
 import { execute } from '$lib/tutorial/engine/executor';
 
 // --- Navigation state ---
-let currentTopicIndex = $state(0);
 let currentChapterIndex = $state(0);
+let currentSessionIndex = $state(0);
 
 // --- Runtime state ---
-let spreadsheet = $state<SpreadsheetState>(loadData(topics[0].chapters[0].table));
-let code = $state(topics[0].chapters[0].js ?? '');
+let spreadsheet = $state<SpreadsheetState>(loadData(chapters[0].sessions[0].table));
+let code = $state(chapters[0].sessions[0].js ?? '');
 let language = $state<Language>('js');
 let output = $state('');
 let error = $state<string | null>(null);
 
-function currentChapter(): Chapter {
-	return topics[currentTopicIndex].chapters[currentChapterIndex];
+function currentSession(): Session {
+	return chapters[currentChapterIndex].sessions[currentSessionIndex];
 }
 
-function defaultLanguage(chapter: Chapter): Language {
-	if (chapter.js) return 'js';
-	if (chapter.py) return 'python';
-	if (chapter.sql) return 'sql';
+function defaultLanguage(session: Session): Language {
+	if (session.js) return 'js';
+	if (session.py) return 'python';
+	if (session.sql) return 'sql';
 	return 'js';
 }
 
-function codeForLanguage(chapter: Chapter, lang: Language): string {
+function codeForLanguage(session: Session, lang: Language): string {
 	switch (lang) {
 		case 'js':
-			return chapter.js ?? '';
+			return session.js ?? '';
 		case 'python':
-			return chapter.py ?? '';
+			return session.py ?? '';
 		case 'sql':
-			return chapter.sql ?? '';
+			return session.sql ?? '';
 	}
 }
 
 function resetRuntime() {
-	const chapter = currentChapter();
-	const lang = defaultLanguage(chapter);
-	spreadsheet = loadData(chapter.table);
+	const session = currentSession();
+	const lang = defaultLanguage(session);
+	spreadsheet = loadData(session.table);
 	language = lang;
-	code = codeForLanguage(chapter, lang);
+	code = codeForLanguage(session, lang);
 	output = '';
 	error = null;
 }
 
 export const tutorial = {
 	// --- Navigation getters ---
-	get topics(): Topic[] {
-		return topics;
-	},
-	get topicIndex() {
-		return currentTopicIndex;
+	get chapters(): Chapter[] {
+		return chapters;
 	},
 	get chapterIndex() {
 		return currentChapterIndex;
 	},
-	get currentTopic(): Topic {
-		return topics[currentTopicIndex];
+	get sessionIndex() {
+		return currentSessionIndex;
 	},
 	get currentChapter(): Chapter {
-		return currentChapter();
+		return chapters[currentChapterIndex];
+	},
+	get currentSession(): Session {
+		return currentSession();
 	},
 
 	// --- Runtime getters ---
@@ -88,20 +88,20 @@ export const tutorial = {
 	},
 
 	// --- Navigation actions ---
-	selectTopic(i: number) {
-		currentTopicIndex = i;
-		currentChapterIndex = 0;
-		resetRuntime();
-	},
 	selectChapter(i: number) {
 		currentChapterIndex = i;
+		currentSessionIndex = 0;
+		resetRuntime();
+	},
+	selectSession(i: number) {
+		currentSessionIndex = i;
 		resetRuntime();
 	},
 
 	// --- Runtime actions ---
 	setLanguage(lang: Language) {
 		language = lang;
-		code = codeForLanguage(currentChapter(), lang);
+		code = codeForLanguage(currentSession(), lang);
 		output = '';
 		error = null;
 	},

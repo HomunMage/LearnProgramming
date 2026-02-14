@@ -1,7 +1,7 @@
 <!-- src/routes/+page.svelte -->
 <script lang="ts">
-	import TopicBar from '$lib/components/TopicBar.svelte';
-	import ChapterTabs from '$lib/components/ChapterTabs.svelte';
+	import ChapterBar from '$lib/components/ChapterBar.svelte';
+	import SessionTabs from '$lib/components/SessionTabs.svelte';
 	import Spreadsheet from '$lib/components/Spreadsheet.svelte';
 	import CodeEditor from '$lib/components/CodeEditor.svelte';
 	import ChatPanel from '$lib/components/ChatPanel.svelte';
@@ -19,8 +19,8 @@
 	);
 
 	let lessonContext = $derived<LessonContext>({
-		topic: tutorial.currentTopic.title,
 		chapter: tutorial.currentChapter.title,
+		session: tutorial.currentSession.title,
 		tableData: toArray(tutorial.spreadsheet),
 		currentCode: tutorial.code,
 		language: tutorial.language
@@ -29,10 +29,10 @@
 
 <!-- Top navigation -->
 <div class="flex items-center justify-between bg-gray-800">
-	<TopicBar
-		topics={tutorial.topics}
-		activeIndex={tutorial.topicIndex}
-		ontopicchange={(i) => tutorial.selectTopic(i)}
+	<ChapterBar
+		chapters={tutorial.chapters}
+		activeIndex={tutorial.chapterIndex}
+		onchapterchange={(i) => tutorial.selectChapter(i)}
 	/>
 	<button
 		data-testid="settings-btn"
@@ -57,10 +57,10 @@
 	</button>
 </div>
 
-<ChapterTabs
-	chapters={tutorial.currentTopic.chapters}
-	activeIndex={tutorial.chapterIndex}
-	onchapterchange={(i) => tutorial.selectChapter(i)}
+<SessionTabs
+	sessions={tutorial.currentChapter.sessions}
+	activeIndex={tutorial.sessionIndex}
+	onsessionchange={(i) => tutorial.selectSession(i)}
 />
 
 <!-- Main content: 3 panels -->
@@ -87,7 +87,7 @@
 
 	<!-- Right: Chat -->
 	<div class="min-h-0 p-3">
-		<ChatPanel {provider} {lessonContext} instruction={tutorial.currentChapter.tutorial} />
+		<ChatPanel {provider} {lessonContext} instruction={tutorial.currentSession.tutorial} />
 	</div>
 </div>
 

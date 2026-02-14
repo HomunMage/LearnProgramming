@@ -5,12 +5,12 @@ const APP_URL = process.env.PLAYWRIGHT_BASE_URL || 'http://localhost:3000/LearnP
 test.describe('Tutorial App', () => {
 	test.beforeEach(async ({ page }) => {
 		await page.goto(APP_URL);
-		await page.waitForSelector('[data-testid="topic-bar"]');
+		await page.waitForSelector('[data-testid="chapter-bar"]');
 	});
 
 	test('renders all main panels', async ({ page }) => {
-		await expect(page.getByTestId('topic-bar')).toBeVisible();
-		await expect(page.getByTestId('chapter-tabs')).toBeVisible();
+		await expect(page.getByTestId('chapter-bar')).toBeVisible();
+		await expect(page.getByTestId('session-tabs')).toBeVisible();
 		await expect(page.getByTestId('spreadsheet')).toBeVisible();
 		await expect(page.getByTestId('code-editor')).toBeVisible();
 		await expect(page.getByTestId('chat-panel')).toBeVisible();
@@ -18,25 +18,27 @@ test.describe('Tutorial App', () => {
 		await page.screenshot({ path: 'e2e/screenshots/01-initial-load.png', fullPage: true });
 	});
 
-	test('shows all four topics', async ({ page }) => {
-		await expect(page.getByTestId('topic-pure-functions')).toBeVisible();
-		await expect(page.getByTestId('topic-map')).toBeVisible();
-		await expect(page.getByTestId('topic-filter')).toBeVisible();
-		await expect(page.getByTestId('topic-reduce')).toBeVisible();
+	test('shows all four chapters', async ({ page }) => {
+		await expect(page.getByTestId('chapter-pure-functions')).toBeVisible();
+		await expect(page.getByTestId('chapter-map')).toBeVisible();
+		await expect(page.getByTestId('chapter-filter')).toBeVisible();
+		await expect(page.getByTestId('chapter-reduce')).toBeVisible();
 	});
 
-	test('shows chapters for active topic', async ({ page }) => {
-		await expect(page.getByTestId('chapter-cells-and-values')).toBeVisible();
-		await expect(page.getByTestId('chapter-simple-formulas')).toBeVisible();
-		await expect(page.getByTestId('chapter-compose')).toBeVisible();
+	test('shows sessions for active chapter', async ({ page }) => {
+		await expect(page.getByTestId('session-raw-calculus')).toBeVisible();
+		await expect(page.getByTestId('session-cells-and-values')).toBeVisible();
+		await expect(page.getByTestId('session-functions')).toBeVisible();
+		await expect(page.getByTestId('session-lambda')).toBeVisible();
+		await expect(page.getByTestId('session-compose')).toBeVisible();
 	});
 
 	test('spreadsheet displays initial data', async ({ page }) => {
 		const cell00 = page.getByTestId('cell-btn-0-0');
-		await expect(cell00).toContainText('1');
+		await expect(cell00).toContainText('10');
 
 		const cell10 = page.getByTestId('cell-btn-1-0');
-		await expect(cell10).toContainText('2');
+		await expect(cell10).toContainText('20');
 	});
 
 	test('can edit a spreadsheet cell', async ({ page }) => {
@@ -66,7 +68,7 @@ test.describe('Tutorial App', () => {
 		await expect(page.getByTestId('code-output')).toBeVisible();
 
 		const cellB0 = page.getByTestId('cell-btn-0-1');
-		await expect(cellB0).toContainText('1');
+		await expect(cellB0).toContainText('13');
 
 		await page.screenshot({
 			path: 'e2e/screenshots/04-spreadsheet-updated.png',
@@ -74,19 +76,19 @@ test.describe('Tutorial App', () => {
 		});
 	});
 
-	test('can switch topics', async ({ page }) => {
-		await page.getByTestId('topic-map').click();
+	test('can switch chapters', async ({ page }) => {
+		await page.getByTestId('chapter-map').click();
 
-		await expect(page.getByTestId('chapter-column-formulas')).toBeVisible();
-		await expect(page.getByTestId('chapter-transformations')).toBeVisible();
+		await expect(page.getByTestId('session-column-formulas')).toBeVisible();
+		await expect(page.getByTestId('session-transformations')).toBeVisible();
 
 		await expect(page.getByTestId('cell-btn-0-0')).toContainText('100');
 
-		await page.screenshot({ path: 'e2e/screenshots/05-topic-switched.png', fullPage: true });
+		await page.screenshot({ path: 'e2e/screenshots/05-chapter-switched.png', fullPage: true });
 	});
 
-	test('can switch chapters within a topic', async ({ page }) => {
-		await page.getByTestId('chapter-simple-formulas').click();
+	test('can switch sessions within a chapter', async ({ page }) => {
+		await page.getByTestId('session-functions').click();
 
 		await expect(page.getByTestId('cell-btn-0-0')).toContainText('10');
 
@@ -94,13 +96,13 @@ test.describe('Tutorial App', () => {
 		await expect(codeInput).toContainText('add3');
 
 		await page.screenshot({
-			path: 'e2e/screenshots/06-chapter-switched.png',
+			path: 'e2e/screenshots/06-session-switched.png',
 			fullPage: true
 		});
 	});
 
 	test('spreadsheet formula evaluation', async ({ page }) => {
-		await page.getByTestId('chapter-simple-formulas').click();
+		await page.getByTestId('session-functions').click();
 
 		await page.getByTestId('cell-btn-0-1').click();
 		const input = page.getByTestId('cell-input-0-1');
@@ -117,7 +119,7 @@ test.describe('Tutorial App', () => {
 
 	test('chat panel shows lesson instruction', async ({ page }) => {
 		await expect(page.getByTestId('lesson-instruction')).toBeVisible();
-		await expect(page.getByTestId('lesson-instruction')).toContainText('Welcome');
+		await expect(page.getByTestId('lesson-instruction')).toContainText('Raw Calculus');
 	});
 
 	test('settings modal opens and closes', async ({ page }) => {

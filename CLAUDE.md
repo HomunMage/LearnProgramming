@@ -63,7 +63,7 @@ E2E tests run via Docker Compose with two services: `app` (Vite preview on port 
 ### Test conventions
 
 - All interactive elements must have `data-testid` attributes
-- Naming: `data-testid="topic-{id}"`, `data-testid="chapter-{id}"`, `data-testid="cell-btn-{row}-{col}"`, etc.
+- Naming: `data-testid="chapter-{id}"`, `data-testid="session-{id}"`, `data-testid="cell-btn-{row}-{col}"`, etc.
 - Use `toHaveValue()` for `<textarea>` and `<input>`, `toContainText()` for other elements
 
 ## Code Style

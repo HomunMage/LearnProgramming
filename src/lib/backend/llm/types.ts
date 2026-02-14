@@ -7,8 +7,8 @@ export interface ChatMessage {
 }
 
 export interface LessonContext {
-	topic: string;
 	chapter: string;
+	session: string;
 	tableData: (string | number | null)[][];
 	currentCode: string;
 	language: 'js' | 'python' | 'sql';

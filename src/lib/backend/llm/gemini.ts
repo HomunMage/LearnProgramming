@@ -14,8 +14,8 @@ Be encouraging and patient. Use short, clear sentences.`;
 
 	if (context) {
 		prompt += `\n\nCurrent lesson context:
-- Topic: ${context.topic}
 - Chapter: ${context.chapter}
+- Session: ${context.session}
 - Language: ${context.language}
 - Current code:\n\`\`\`${context.language}\n${context.currentCode}\n\`\`\`
 - Table data: ${JSON.stringify(context.tableData)}`;

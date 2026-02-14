@@ -3,7 +3,7 @@
 
 import type { CellValue } from '$lib/tutorial/engine/spreadsheet';
 
-export interface Chapter {
+export interface Session {
 	id: string;
 	title: string;
 	description: string;
@@ -16,8 +16,8 @@ export interface Chapter {
 	hints: string[];
 }
 
-export interface Topic {
+export interface Chapter {
 	id: string;
 	title: string;
-	chapters: Chapter[];
+	sessions: Session[];
 }

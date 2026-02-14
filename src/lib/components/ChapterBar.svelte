@@ -1,4 +1,4 @@
-<!-- src/lib/components/ChapterTabs.svelte -->
+<!-- src/lib/components/ChapterBar.svelte -->
 <script lang="ts">
 	import type { Chapter } from '$lib/tutorial/content';
 
@@ -13,17 +13,17 @@
 	} = $props();
 </script>
 
-<div data-testid="chapter-tabs" class="flex gap-1 border-b border-gray-700 bg-gray-800/50 px-4">
+<nav data-testid="chapter-bar" class="flex gap-1 bg-gray-800 px-4 py-2">
 	{#each chapters as chapter, i (chapter.id)}
 		<button
 			data-testid="chapter-{chapter.id}"
-			class="border-b-2 px-3 py-2 text-sm transition-colors
+			class="rounded-t-lg px-4 py-2 text-sm font-medium transition-colors
 				{i === activeIndex
-				? 'border-blue-400 text-blue-400'
-				: 'border-transparent text-gray-500 hover:border-gray-600 hover:text-gray-300'}"
+				? 'bg-gray-700 text-white'
+				: 'text-gray-400 hover:bg-gray-700/50 hover:text-gray-200'}"
 			onclick={() => onchapterchange(i)}
 		>
 			{chapter.title}
 		</button>
 	{/each}
-</div>
+</nav>
