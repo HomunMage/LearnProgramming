@@ -6,7 +6,6 @@ Teach non-coders programming by bridging **Excel spreadsheets → functional pro
 
 and Docx experience -> markdown, html.
 
-
 People already understand "B column = A column + 3". That IS a pure function.
 "Drag the formula down every row" IS `map`. "SUM(A:A)" IS `reduce`. "Show rows where A > 5" IS `filter`.
 
@@ -297,6 +296,3 @@ All components are **UI-only**, calling lib functions:
 - Progress tracking (localStorage)
 - Mobile responsive layout
 - More topics
-
-
-
