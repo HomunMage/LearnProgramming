@@ -2,7 +2,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { courses } from '$lib/courses';
-	import { projectBase } from '../../../myconfig.js';
+	import { base } from '$lib/path';
 	import SettingsModal from './SettingsModal.svelte';
 
 	let menuOpen = $state(false);
@@ -53,7 +53,7 @@
 			{#each courses as course (course.id)}
 				<a
 					data-testid="nav-course-{course.id}"
-					href="{projectBase}/course/{course.id}"
+					href="{base}/course/{course.id}"
 					class="flex items-center gap-2 px-4 py-2 text-sm transition-colors
 						{activeCourseId() === course.id
 						? 'bg-blue-900/40 text-blue-300'
