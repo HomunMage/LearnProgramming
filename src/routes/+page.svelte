@@ -2,8 +2,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { projectBase } from '../../myconfig.js';
 
 	onMount(() => {
-		goto('/course/functional', { replaceState: true });
+		goto(`${projectBase}/course/functional`, { replaceState: true });
 	});
 </script>
